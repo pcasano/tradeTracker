@@ -22,7 +22,7 @@ public class Main {
         Response response = request.queryParam("t", configuration.getToken())
                 .queryParam("q", configuration.getQueryId())
                 .queryParam("v", configuration.getApiVersion())
-                .get("FlexStatementService.SendRequest");
+                .get("FlexStatementService.SendRequest_");
         String xmlString = response.asString();
 
         String referenceCode = new XmlParser(xmlString).getReferenceCode();
