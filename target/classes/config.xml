@@ -2,7 +2,7 @@
 
 <configuration>
     <baseUrl>https://gdcdyn.interactivebrokers.com/Universal/servlet/</baseUrl>
-    <token>...</token>
-    <queryId>...</queryId>
+    <token>57598841358470789118612</token>
+    <queryId>525176</queryId>
     <apiVersion>3</apiVersion>
 </configuration>
