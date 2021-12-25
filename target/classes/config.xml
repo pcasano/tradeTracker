@@ -3,8 +3,8 @@
 <configuration>
     <brokerData>
         <baseUrl>https://gdcdyn.interactivebrokers.com/Universal/servlet/</baseUrl>
-        <token>57598841358470789118612</token>
-        <queryId>525176</queryId>
+        <token>...</token>
+        <queryId>...</queryId>
         <apiVersion>3</apiVersion>
     </brokerData>
     <emailData>
