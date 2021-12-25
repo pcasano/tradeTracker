@@ -8,15 +8,15 @@ import java.util.Date;
 
 public class StatementOfFundsLine {
 
-    private String currency;
-    private String fxRateToBase;
-    private String description;
-    private Date date;
-    private String activityCode;
-    private String activityDescription;
-    private double amount;
-    private double balance;
-    private String levelOfDetail;
+    private final String currency;
+    private final String fxRateToBase;
+    private final String description;
+    private final Date date;
+    private final String activityCode;
+    private final String activityDescription;
+    private final double amount;
+    private final double balance;
+    private final String levelOfDetail;
 
     public StatementOfFundsLine(NamedNodeMap namedNodeMap) throws ParseException {
         this.currency = namedNodeMap.getNamedItem("currency").getTextContent();
@@ -25,8 +25,8 @@ public class StatementOfFundsLine {
         this.date = new SimpleDateFormat("dd/MM/yyyy").parse(namedNodeMap.getNamedItem("date").getTextContent());
         this.activityCode = namedNodeMap.getNamedItem("activityCode").getTextContent();
         this.activityDescription = namedNodeMap.getNamedItem("activityDescription").getTextContent();
-        this.amount = Double.valueOf(namedNodeMap.getNamedItem("amount").getTextContent());
-        this.balance = Double.valueOf(namedNodeMap.getNamedItem("balance").getTextContent());
+        this.amount = Double.parseDouble(namedNodeMap.getNamedItem("amount").getTextContent());
+        this.balance = Double.parseDouble(namedNodeMap.getNamedItem("balance").getTextContent());
         this.levelOfDetail = namedNodeMap.getNamedItem("levelOfDetail").getTextContent();
     }
 

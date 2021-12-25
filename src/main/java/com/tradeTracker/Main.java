@@ -1,5 +1,8 @@
 package com.tradeTracker;
 
+import com.tradeTracker.email.DividendMessageBuilder;
+import com.tradeTracker.email.MessageBuilder;
+import com.tradeTracker.reportContents.Company;
 import com.tradeTracker.reportContents.FlexStatement;
 import com.tradeTracker.reportContents.StatementOfFundsLine;
 import io.restassured.RestAssured;
@@ -14,6 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -49,13 +53,30 @@ public class Main {
                 .get("FlexStatementService.GetStatement");
 
         String xmlStringForContent = responseForContent.asString();
+
+
         XmlParser xmlParserForContent = new XmlParser(xmlStringForContent);
         List<StatementOfFundsLine> listOfStatementOfFundsLine = xmlParserForContent.getListOfStatementOfFundsLine();
-        List<StatementOfFundsLine> listOfStatementOfFundsLineBaseCurrency =
-                listOfStatementOfFundsLine.stream().filter(entry -> entry.getLevelOfDetail().equals("BaseCurrency")).collect(Collectors.toList());
-        List<StatementOfFundsLine> listOfStatementOfFundsLineCurrency =
-                listOfStatementOfFundsLine.stream().filter(entry -> entry.getLevelOfDetail().equals("Currency")).collect(Collectors.toList());
+
+
+        List<StatementOfFundsLine> listOfDivs = listOfStatementOfFundsLine.stream()
+                .filter(entry -> entry.getLevelOfDetail().equals("BaseCurrency") && entry.getActivityCode().equals("DIV")).toList();
+
+        List<StatementOfFundsLine> listOfTaxes = listOfStatementOfFundsLine.stream()
+                .filter(entry -> entry.getLevelOfDetail().equals("BaseCurrency") && entry.getActivityCode().equals("FRTAX")).toList();
+        List<Company> listOfCompanies = new ArrayList<>();
+
+        listOfDivs.forEach(dividend -> {
+            listOfCompanies.add(new Company(
+                    dividend,
+                    listOfTaxes.stream().filter(tax -> tax.getDescription().equals(dividend.getDescription())).findFirst().get())
+        );
+        });
+
+
         FlexStatement flexStatement = xmlParserForContent.getFlexStatement();
+
+        new DividendMessageBuilder(new ArrayList<Company>(), configuration).sendDividendEmail();
     }
 
 }

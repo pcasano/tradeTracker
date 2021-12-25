@@ -7,11 +7,11 @@ import java.util.Date;
 
 public class FlexStatement {
 
-    private String accountId;
-    private Date fromDate;
-    private Date toDate;
-    private String period;
-    private Date whenGenerated;
+    private final String accountId;
+    private final Date fromDate;
+    private final Date toDate;
+    private final String period;
+    private final Date whenGenerated;
 
     public FlexStatement(NamedNodeMap namedNodeMap) throws ParseException {
         this.accountId = namedNodeMap.getNamedItem("accountId").getTextContent();
