@@ -8,7 +8,7 @@
         <apiVersion>3</apiVersion>
     </brokerData>
     <emailData>
-        <emailSender>...</emailSender>
+        <emailSender>ib.trade.tracker@gmail.com</emailSender>
         <emailSenderPass>...</emailSenderPass>
         <targetEmail>...</targetEmail>
     </emailData>
