@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 <configuration>
-    <baseUrl>https://gdcdyn.interactivebrokers.com/Universal/servlet/</baseUrl>
-    <token>57598841358470789118612</token>
-    <queryId>525176</queryId>
-    <apiVersion>3</apiVersion>
+    <brokerData>
+        <baseUrl>https://gdcdyn.interactivebrokers.com/Universal/servlet/</baseUrl>
+        <token>...</token>
+        <queryId>...</queryId>
+        <apiVersion>3</apiVersion>
+    </brokerData>
+    <emailData>
+        <emailSender>...</emailSender>
+        <emailSenderPass>...</emailSenderPass>
+        <targetEmail>...</targetEmail>
+    </emailData>
 </configuration>

@@ -7,27 +7,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Configuration {
 
     @XmlElement
-    private String token;
+    private BrokerData brokerData;
     @XmlElement
-    private String queryId;
-    @XmlElement
-    private String baseUrl;
-    @XmlElement
-    private String apiVersion;
+    private EmailData emailData;
 
-    public String getToken() {
-        return token;
+    public BrokerData getBrokerData() {
+        return brokerData;
     }
 
-    public String getQueryId() {
-        return queryId;
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
-    }
-
-    public String getApiVersion() {
-        return apiVersion;
+    public EmailData getEmailData() {
+        return emailData;
     }
 }

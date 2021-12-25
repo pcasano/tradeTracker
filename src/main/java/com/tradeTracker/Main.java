@@ -24,11 +24,11 @@ public class Main {
 
         Configuration configuration = new ConfigurationReader().unmarshal();
 
-        RestAssured.baseURI = configuration.getBaseUrl();
+        RestAssured.baseURI = configuration.getBrokerData().getBaseUrl();
         RequestSpecification request = RestAssured.given();
-        Response response = request.queryParam("t", configuration.getToken())
-                .queryParam("q", configuration.getQueryId())
-                .queryParam("v", configuration.getApiVersion())
+        Response response = request.queryParam("t", configuration.getBrokerData().getToken())
+                .queryParam("q", configuration.getBrokerData().getQueryId())
+                .queryParam("v", configuration.getBrokerData().getApiVersion())
                 .get("FlexStatementService.SendRequest");
         String xmlStringForReferenceCode = response.asString();
         XmlParser xmlParserForReferenceCode = new XmlParser(xmlStringForReferenceCode);
@@ -44,8 +44,8 @@ public class Main {
         TimeUnit.SECONDS.sleep(2);
         RequestSpecification requestForContent = RestAssured.given();
         Response responseForContent = requestForContent.queryParam("q", referenceCode)
-                .queryParam("t", configuration.getToken())
-                .queryParam("v", configuration.getApiVersion())
+                .queryParam("t", configuration.getBrokerData().getToken())
+                .queryParam("v", configuration.getBrokerData().getApiVersion())
                 .get("FlexStatementService.GetStatement");
 
         String xmlStringForContent = responseForContent.asString();
@@ -56,8 +56,6 @@ public class Main {
         List<StatementOfFundsLine> listOfStatementOfFundsLineCurrency =
                 listOfStatementOfFundsLine.stream().filter(entry -> entry.getLevelOfDetail().equals("Currency")).collect(Collectors.toList());
         FlexStatement flexStatement = xmlParserForContent.getFlexStatement();
-
-        System.out.println("");
     }
 
 }
