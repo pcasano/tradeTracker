@@ -9,7 +9,7 @@
     </brokerData>
     <emailData>
         <emailSender>ib.trade.tracker@gmail.com</emailSender>
-        <emailSenderPass>0GaDpJ74gbGsgNcLibyM</emailSenderPass>
+        <emailSenderPass>...</emailSenderPass>
         <targetEmail>pabcas@pm.me</targetEmail>
     </emailData>
 </configuration>
