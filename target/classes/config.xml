@@ -3,13 +3,13 @@
 <configuration>
     <brokerData>
         <baseUrl>https://gdcdyn.interactivebrokers.com/Universal/servlet/</baseUrl>
-        <token>57598841358470789118612</token>
-        <queryId>525176</queryId>
+        <token>...</token>
+        <queryId>...</queryId>
         <apiVersion>3</apiVersion>
     </brokerData>
     <emailData>
         <emailSender>ib.trade.tracker@gmail.com</emailSender>
-        <emailSenderPass>0GaDpJ74gbGsgNcLibyM</emailSenderPass>
+        <emailSenderPass>...</emailSenderPass>
         <targetEmail>pabcas@pm.me</targetEmail>
     </emailData>
 </configuration>
