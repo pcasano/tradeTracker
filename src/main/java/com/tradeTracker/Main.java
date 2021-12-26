@@ -131,7 +131,7 @@ public class Main {
     private static double getRatioGivenCurrency(XmlParser xmlParserForContent, String currency) throws ParseException {
         Optional<ConversionRate> op = xmlParserForContent.getListOfConversionRate()
                 .stream()
-                .filter(fromCurrency -> fromCurrency.getFromCurrency().equals(currency))
+                .filter(conversionRate -> conversionRate.getFromCurrency().equals(currency))
                 .findFirst();
         return op.map(ConversionRate::getRate).orElse(1.00);
     }
