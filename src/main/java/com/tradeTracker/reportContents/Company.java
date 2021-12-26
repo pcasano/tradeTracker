@@ -9,14 +9,16 @@ public class Company {
     private final double amount;
     private final double tax;
     private final String currency;
+    private final double rate;
 
 
-    public Company(StatementOfFundsLine dividendEntry, StatementOfFundsLine taxEntry) {
+    public Company(StatementOfFundsLine dividendEntry, StatementOfFundsLine taxEntry, double rate) {
         this.amount = dividendEntry.getAmount();
         this.companyName = dividendEntry.getDescription();
         this.tax = taxEntry.getAmount();
         this.currency = dividendEntry.getCurrency();
         this.paymentDate = dividendEntry.getDate();
+        this.rate = rate;
     }
 
     public Date getPaymentDate() {
@@ -37,5 +39,9 @@ public class Company {
 
     public String getCurrency() {
         return currency;
+    }
+
+    public double getRate() {
+        return rate;
     }
 }

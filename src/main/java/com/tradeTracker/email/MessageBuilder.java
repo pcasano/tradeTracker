@@ -22,20 +22,26 @@ public class MessageBuilder {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true"); //enable authentication
-        props.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
         Session session = Session.getInstance(props, null);
 
         try {
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(configuration.getEmailData().getEmailSender());
-            msg.setRecipients(Message.RecipientType.TO,
-                    configuration.getEmailData().getTargetEmail());
+            msg.setRecipients(
+                    Message.RecipientType.TO,
+                    configuration.getEmailData().getTargetEmail()
+            );
             msg.setSubject(subject);
             msg.setSentDate(new Date());
             msg.setText("Hello, world!\n");
             msg.setContent(table, "text/html");
-            Transport.send(msg, configuration.getEmailData().getEmailSender(), configuration.getEmailData().getEmailSenderPass());
+            Transport.send(
+                    msg,
+                    configuration.getEmailData().getEmailSender(),
+                    configuration.getEmailData().getEmailSenderPass()
+            );
         } catch (MessagingException mex) {
             System.out.println("send failed, exception: " + mex);
         }

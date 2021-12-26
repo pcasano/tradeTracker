@@ -29,12 +29,13 @@ public class DividendMessageBuilder extends MessageBuilder{
                 <table style="border-collapse: collapse; width: 100%; height: 72px;" border="1">
                 <tbody>
                 <tr style="height: 18px;">
-                <td style="width: 20%; height: 18px;"><span style="background-color: #ffffff;"><strong>Date</strong></span></td>
+                <td style="width: 10%; height: 18px;"><span style="background-color: #ffffff;"><strong>Date</strong></span></td>
                 <td style="width: 20%; height: 18px;"><span style="background-color: #ffffff;"><strong>Company</strong></span></td>
-                <td style="width: 20%; height: 18px;"><span style="background-color: #ffffff;"><strong>Amount</strong></span></td>
-                <td style="width: 20%; height: 18px;"><span style="background-color: #ffffff;"><strong>Taxes</strong></span></td>
-                <td style="width: 20%; height: 18px;"><span style="background-color: #ffffff;"><strong>Net</strong></span></td>
-                <td style="width: 20%; height: 18px;"><span style="background-color: #ffffff;"><strong>Currency</strong></span></td>
+                <td style="width: 10%; height: 18px;"><span style="background-color: #ffffff;"><strong>Amount</strong></span></td>
+                <td style="width: 10%; height: 18px;"><span style="background-color: #ffffff;"><strong>Taxes</strong></span></td>
+                <td style="width: 10%; height: 18px;"><span style="background-color: #ffffff;"><strong>Net</strong></span></td>
+                <td style="width: 10%; height: 18px;"><span style="background-color: #ffffff;"><strong>Currency</strong></span></td>
+                <td style="width: 10%; height: 18px;"><span style="background-color: #ffffff;"><strong>Rate</strong></span></td>
                 </tr>
                 """;
         StringBuilder sb = new StringBuilder(htmlTableHeader);
@@ -50,12 +51,13 @@ public class DividendMessageBuilder extends MessageBuilder{
     private String getTableRow(Company company) {
         DecimalFormat df = new DecimalFormat("0.00");
         return  "<tr style=\"height: 18px;\">\n" +
-                "<td style=\"width: 20%; height: 18px;\">"+new SimpleDateFormat("dd/MM/yyyy").format(company.getPaymentDate()) +"</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">"+new SimpleDateFormat("dd/MM/yyyy").format(company.getPaymentDate()) +"</td>\n" +
                 "<td style=\"width: 20%; height: 18px;\">"+company.getCompanyName()+"</td>\n" +
-                "<td style=\"width: 20%; height: 18px;\">"+company.getAmount()+"</td>\n" +
-                "<td style=\"width: 20%; height: 18px;\">"+company.getTax()+ " (" + df.format(-100*company.getTax()/company.getAmount())+"%)</td>\n" +
-                "<td style=\"width: 20%; height: 18px;\">"+df.format(Double.valueOf(company.getAmount() + company.getTax()))+"</td>\n" +
-                "<td style=\"width: 20%; height: 18px;\">"+company.getCurrency()+"</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">"+company.getAmount()+"</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">"+company.getTax()+ " (" + df.format(-100*company.getTax()/company.getAmount())+"%)</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">"+df.format(Double.valueOf(company.getAmount() + company.getTax()))+"</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">"+company.getCurrency()+"</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">"+company.getRate()+"</td>\n" +
                 "</tr>\n";
     }
 }

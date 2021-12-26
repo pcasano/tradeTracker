@@ -4,6 +4,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.tradeTracker.reportContents.ConversionRate;
 import com.tradeTracker.reportContents.FlexStatement;
 import com.tradeTracker.reportContents.StatementOfFundsLine;
 import org.w3c.dom.*;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class XmlParser {
 
-    private Document document;
+    private final Document document;
 
     public XmlParser(String xmlString) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -55,6 +56,17 @@ public class XmlParser {
             }
         }
         return listStatementOfFundsLine;
+    }
+
+    public List<ConversionRate> getListOfConversionRate() throws ParseException{
+        List<ConversionRate> listConversionRate = new ArrayList<>();
+        NodeList nodeList = this.document.getElementsByTagName("ConversionRates").item(0).getChildNodes();
+        for (int index=0; index<nodeList.getLength(); index++) {
+            if (nodeList.item(index) instanceof Element) {
+                listConversionRate.add(new ConversionRate(nodeList.item(index).getAttributes()));
+            }
+        }
+        return listConversionRate;
     }
 
 }
