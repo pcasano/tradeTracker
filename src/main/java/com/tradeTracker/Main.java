@@ -107,22 +107,15 @@ public class Main {
         XmlParser xmlParserForContent = new XmlParser(xmlStringForContent);
         List<StatementOfFundsLine> listOfStatementOfFundsLine = xmlParserForContent.getListOfStatementOfFundsLine();
 
-        List<StatementOfFundsLine> listOfDivs = listOfStatementOfFundsLine.stream()
-                .filter(entry -> entry.getLevelOfDetail().equals("BaseCurrency") && entry.getActivityCode().equals("DIV")).toList();
+        List<StatementOfFundsLine> listOfDivsBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "DIV");
+        List<StatementOfFundsLine> listOfTaxesBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "FRTAX");
+        List<Company> listOfCompaniesBase = getListOfCompanies(listOfDivsBase, listOfTaxesBase, xmlParserForContent);
 
-        List<StatementOfFundsLine> listOfTaxes = listOfStatementOfFundsLine.stream()
-                .filter(entry -> entry.getLevelOfDetail().equals("BaseCurrency") && entry.getActivityCode().equals("FRTAX")).toList();
-        List<Company> listOfCompanies = new ArrayList<>();
+        List<StatementOfFundsLine> listOfDivs = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "Currency", "DIV");
+        List<StatementOfFundsLine> listOfTaxes = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "Currency", "FRTAX");
+        List<Company> listOfCompanies = getListOfCompanies(listOfDivs, listOfTaxes, xmlParserForContent);
 
-        for (StatementOfFundsLine dividend : listOfDivs) {
-            listOfCompanies.add(new Company(
-                    dividend,
-                    listOfTaxes.stream().filter(tax -> tax.getDescription().equals(dividend.getDescription())).findFirst().get(),
-                    getRatioGivenCurrency(xmlParserForContent, dividend.getCurrency())
-            ));
-        }
-
-        new DividendMessageBuilder(listOfCompanies, configuration).sendDividendEmail();
+        new DividendMessageBuilder(listOfCompaniesBase, listOfCompanies, configuration).sendDividendEmail();
         FlexStatement flexStatement = xmlParserForContent.getFlexStatement();
 
 
@@ -134,5 +127,30 @@ public class Main {
                 .filter(conversionRate -> conversionRate.getFromCurrency().equals(currency))
                 .findFirst();
         return op.map(ConversionRate::getRate).orElse(1.00);
+    }
+
+    private static List<Company> getListOfCompanies(
+            List<StatementOfFundsLine> listOfDivs,
+            List<StatementOfFundsLine> listOfTaxes,
+            XmlParser xmlParserForContent
+    ) throws ParseException {
+        List<Company> listOfCompanies = new ArrayList<>();
+
+        for (StatementOfFundsLine dividend : listOfDivs) {
+            listOfCompanies.add(new Company(
+                    dividend,
+                    listOfTaxes.stream().filter(tax -> tax.getDescription().equals(dividend.getDescription())).findFirst().get(),
+                    getRatioGivenCurrency(xmlParserForContent, dividend.getCurrency())
+            ));
+        }
+        return listOfCompanies;
+    }
+
+    private static List<StatementOfFundsLine> getListOfStatementOfFundsLine(
+            List<StatementOfFundsLine> listOfStatementOfFundsLine,
+            String levelOfDetail,
+            String activityCode) {
+        return listOfStatementOfFundsLine.stream()
+                .filter(entry -> entry.getLevelOfDetail().equals(levelOfDetail) && entry.getActivityCode().equals(activityCode)).toList();
     }
 }
