@@ -10,17 +10,19 @@ import java.util.List;
 
 public class DividendMessageBuilder extends MessageBuilder{
 
+    private final List<Company> listOfCompaniesBase;
     private final List<Company> listOfCompanies;
 
-    public DividendMessageBuilder(List<Company> listOfCompanies, Configuration configuration) {
+    public DividendMessageBuilder(List<Company> listOfCompaniesBase, List<Company> listOfCompanies, Configuration configuration) {
         super(configuration);
+        this.listOfCompaniesBase = listOfCompaniesBase;
         this.listOfCompanies = listOfCompanies;
     }
 
     public void sendDividendEmail() {
         this.sendEmail(
                 this.getHtmlTable(),
-                "Dividend on " + new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()-24*60*60*1000))
+                "Dividends on " + new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()-24*60*60*1000))
         );
     }
 
@@ -38,9 +40,18 @@ public class DividendMessageBuilder extends MessageBuilder{
                 <td style="width: 10%; height: 18px;"><span style="background-color: #ffffff;"><strong>Rate</strong></span></td>
                 </tr>
                 """;
-        StringBuilder sb = new StringBuilder(htmlTableHeader);
-        listOfCompanies.forEach(company -> sb.append(getTableRow(company)));
+        StringBuilder sb = new StringBuilder("<h3>Dividends in EUR:</h3>");
+        sb.append(htmlTableHeader);
+        listOfCompaniesBase.forEach(company -> sb.append(getTableRow(company)));
 
+        sb.append("""
+                </tr>
+                </tbody>
+                </table>""");
+        sb.append("<h3>\n</h3>");
+        sb.append("<h3>Dividends in original currency:</h3>");
+        sb.append(htmlTableHeader);
+        listOfCompanies.forEach(company -> sb.append(getTableRow(company)));
         sb.append("""
                 </tr>
                 </tbody>
