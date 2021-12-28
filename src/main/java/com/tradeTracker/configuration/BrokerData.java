@@ -7,7 +7,9 @@ public class BrokerData {
     @XmlElement
     private String token;
     @XmlElement
-    private String queryId;
+    private String dailyQueryId;
+    @XmlElement
+    private String monthlyQueryId;
     @XmlElement
     private String baseUrl;
     @XmlElement
@@ -17,8 +19,12 @@ public class BrokerData {
         return token;
     }
 
-    public String getQueryId() {
-        return queryId;
+    public String getDailyQueryId() {
+        return dailyQueryId;
+    }
+
+    public String getMonthlyQueryId() {
+        return monthlyQueryId;
     }
 
     public String getBaseUrl() {
