@@ -46,7 +46,7 @@ public class TradeMessageBuilder extends MessageBuilder {
                 </tbody>
                 </table>""");
         sb.append("<h3>\n</h3>");
-        sb.append("<h3>Trades in EUR:</h3>");
+        sb.append("<h3>Trades in EUR: " + df.format(-listOfCompaniesBase.stream().mapToDouble(Company::getAmount).sum()) + " euros" + "</h3>");
         sb.append(htmlTableHeader);
         listOfCompaniesBase.forEach(company -> sb.append(getTableRow(company)));
         sb.append("""
@@ -61,7 +61,7 @@ public class TradeMessageBuilder extends MessageBuilder {
                 "<td style=\"width: 10%; height: 18px;\">"+new SimpleDateFormat("dd/MM/yyyy").format(company.getPaymentDate()) +"</td>\n" +
                 "<td style=\"width: 20%; height: 18px;\">"+company.getCompanyName()+"</td>\n" +
                 "<td style=\"width: 10%; height: 18px;\">"+company.getActivityCode()+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+df.format(company.getAmount())+"</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">"+df.format(-company.getAmount())+"</td>\n" +
                 "<td style=\"width: 10%; height: 18px;\">"+company.getCurrency()+"</td>\n" +
                 "<td style=\"width: 10%; height: 18px;\">"+company.getRate()+"</td>\n" +
                 "</tr>\n";

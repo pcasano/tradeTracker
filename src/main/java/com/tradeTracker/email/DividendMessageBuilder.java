@@ -38,18 +38,18 @@ public class DividendMessageBuilder extends MessageBuilder{
                 <td style="width: 10%; height: 18px;"><span style="background-color: #ffffff;"><strong>Rate</strong></span></td>
                 </tr>
                 """;
-        StringBuilder sb = new StringBuilder("<h3>Dividends in EUR:</h3>");
+        StringBuilder sb = new StringBuilder("<h3>Dividends in original currency:</h3>");
         sb.append(htmlTableHeader);
-        listOfCompaniesBase.forEach(company -> sb.append(getTableRow(company)));
+        listOfCompanies.forEach(company -> sb.append(getTableRow(company)));
 
         sb.append("""
                 </tr>
                 </tbody>
                 </table>""");
         sb.append("<h3>\n</h3>");
-        sb.append("<h3>Dividends in original currency:</h3>");
+        sb.append("<h3>Dividends in EUR: " + df.format(listOfCompaniesBase.stream().mapToDouble(Company::getAmount).sum()) + " euros" + "</h3>");
         sb.append(htmlTableHeader);
-        listOfCompanies.forEach(company -> sb.append(getTableRow(company)));
+        listOfCompaniesBase.forEach(company -> sb.append(getTableRow(company)));
         sb.append("""
                 </tr>
                 </tbody>
