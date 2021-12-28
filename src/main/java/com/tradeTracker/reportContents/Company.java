@@ -1,24 +1,32 @@
 package com.tradeTracker.reportContents;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class Company {
 
     private final Date paymentDate;
     private final String companyName;
     private final double amount;
-    private final double tax;
+    private double tax;
     private final String currency;
     private final double rate;
+    private final String activityCode;
 
 
-    public Company(StatementOfFundsLine dividendEntry, StatementOfFundsLine taxEntry, double rate) {
+    public Company(StatementOfFundsLine dividendEntry, Optional<StatementOfFundsLine> optionalTaxEntry) {
         this.amount = dividendEntry.getAmount();
         this.companyName = dividendEntry.getDescription();
-        this.tax = taxEntry.getAmount();
+        optionalTaxEntry.ifPresent(taxEntry -> this.tax = taxEntry.getAmount());
         this.currency = dividendEntry.getCurrency();
         this.paymentDate = dividendEntry.getDate();
-        this.rate = rate;
+        this.rate = dividendEntry.getFxRateToBase();
+        this.activityCode = dividendEntry.getActivityCode();
+
+    }
+
+    public String getActivityCode() {
+        return activityCode;
     }
 
     public Date getPaymentDate() {
