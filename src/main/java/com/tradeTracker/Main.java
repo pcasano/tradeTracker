@@ -1,5 +1,6 @@
 package com.tradeTracker;
 
+import com.tradeTracker.configuration.Query;
 import com.tradeTracker.email.DividendMessageBuilder;
 import com.tradeTracker.email.TradeMessageBuilder;
 import com.tradeTracker.reportContents.Company;
@@ -26,13 +27,12 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) throws JAXBException, ParserConfigurationException, IOException, SAXException, InterruptedException, ParseException {
-
         Configuration configuration = new ConfigurationReader().unmarshal();
 
         RestAssured.baseURI = configuration.getBrokerData().getBaseUrl();
         RequestSpecification request = RestAssured.given();
         Response response = request.queryParam("t", configuration.getBrokerData().getToken())
-                .queryParam("q", configuration.getBrokerData().getQueryId())
+                .queryParam("q", new Query(configuration, args).getQueryId())
                 .queryParam("v", configuration.getBrokerData().getApiVersion())
                 .get("FlexStatementService.SendRequest");
         String xmlStringForReferenceCode = response.asString();
@@ -56,6 +56,7 @@ public class Main {
         String xmlStringForContent = responseForContent.asString();
 
         XmlParser xmlParserForContent = new XmlParser(xmlStringForContent);
+        FlexStatement flexStatement = xmlParserForContent.getFlexStatement();
         List<StatementOfFundsLine> listOfStatementOfFundsLine = xmlParserForContent.getListOfStatementOfFundsLine();
 
         List<StatementOfFundsLine> listOfDivsBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "DIV");
@@ -72,10 +73,10 @@ public class Main {
         List<StatementOfFundsLine> listOfTrades = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "Currency", "BUY", "SELL");
         List<Company> listOfTradeCompanies = getListOfTradeCompanies(listOfTrades);
 
-        new DividendMessageBuilder(listOfDivCompaniesBase, listOfDivCompanies, configuration).sendDividendEmail();
-        new TradeMessageBuilder(listOfTradeCompaniesBase, listOfTradeCompanies, configuration).sendTradeEmail();
+        new DividendMessageBuilder(listOfDivCompaniesBase, listOfDivCompanies, configuration, flexStatement).sendDividendEmail();
+        new TradeMessageBuilder(listOfTradeCompaniesBase, listOfTradeCompanies, configuration, flexStatement).sendTradeEmail();
 
-        FlexStatement flexStatement = xmlParserForContent.getFlexStatement();
+
 
     }
 
