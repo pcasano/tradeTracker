@@ -1,7 +1,6 @@
 package com.tradeTracker.reportContents;
 
 import org.w3c.dom.NamedNodeMap;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,7 +8,7 @@ import java.util.Date;
 public class StatementOfFundsLine {
 
     private final String currency;
-    private final String fxRateToBase;
+    private final double fxRateToBase;
     private final String description;
     private final Date date;
     private final String activityCode;
@@ -20,7 +19,7 @@ public class StatementOfFundsLine {
 
     public StatementOfFundsLine(NamedNodeMap namedNodeMap) throws ParseException {
         this.currency = namedNodeMap.getNamedItem("currency").getTextContent();
-        this.fxRateToBase = namedNodeMap.getNamedItem("fxRateToBase").getTextContent();
+        this.fxRateToBase = Double.parseDouble(namedNodeMap.getNamedItem("fxRateToBase").getTextContent());
         this.description = namedNodeMap.getNamedItem("description").getTextContent();
         this.date = new SimpleDateFormat("dd/MM/yyyy").parse(namedNodeMap.getNamedItem("date").getTextContent());
         this.activityCode = namedNodeMap.getNamedItem("activityCode").getTextContent();
@@ -34,7 +33,7 @@ public class StatementOfFundsLine {
         return currency;
     }
 
-    public String getFxRateToBase() {
+    public double getFxRateToBase() {
         return fxRateToBase;
     }
 
