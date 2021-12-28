@@ -62,7 +62,7 @@ public class DividendMessageBuilder extends MessageBuilder{
                 "<td style=\"width: 10%; height: 18px;\">"+new SimpleDateFormat("dd/MM/yyyy").format(company.getPaymentDate()) +"</td>\n" +
                 "<td style=\"width: 20%; height: 18px;\">"+company.getCompanyName()+"</td>\n" +
                 "<td style=\"width: 10%; height: 18px;\">"+df.format(company.getAmount())+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+company.getTax()+ " (" + df.format(-100*company.getTax()/company.getAmount())+"%)</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">"+df.format((company.getTax()))+ " (" + df.format(-100*company.getTax()/company.getAmount())+"%)</td>\n" +
                 "<td style=\"width: 10%; height: 18px;\">"+df.format(Double.valueOf(company.getAmount() + company.getTax()))+"</td>\n" +
                 "<td style=\"width: 10%; height: 18px;\">"+company.getCurrency()+"</td>\n" +
                 "<td style=\"width: 10%; height: 18px;\">"+company.getRate()+"</td>\n" +
