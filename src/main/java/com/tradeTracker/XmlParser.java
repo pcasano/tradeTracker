@@ -57,16 +57,4 @@ public class XmlParser {
         }
         return listStatementOfFundsLine;
     }
-
-    public List<ConversionRate> getListOfConversionRate() throws ParseException{
-        List<ConversionRate> listConversionRate = new ArrayList<>();
-        NodeList nodeList = this.document.getElementsByTagName("ConversionRates").item(0).getChildNodes();
-        for (int index=0; index<nodeList.getLength(); index++) {
-            if (nodeList.item(index) instanceof Element) {
-                listConversionRate.add(new ConversionRate(nodeList.item(index).getAttributes()));
-            }
-        }
-        return listConversionRate;
-    }
-
 }
