@@ -2,25 +2,32 @@ package com.tradeTracker.email;
 
 import com.tradeTracker.configuration.Configuration;
 import com.tradeTracker.reportContents.Company;
+import com.tradeTracker.reportContents.FlexStatement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-public class DividendMessageBuilder extends MessageBuilder{
+public class DividendMessageBuilder extends MessageBuilder {
 
     private final List<Company> listOfCompaniesBase;
     private final List<Company> listOfCompanies;
+    private final String emailSubject;
 
-    public DividendMessageBuilder(List<Company> listOfCompaniesBase, List<Company> listOfCompanies, Configuration configuration) {
+    public DividendMessageBuilder(List<Company> listOfCompaniesBase, List<Company> listOfCompanies, Configuration configuration, FlexStatement flexStatement) {
         super(configuration);
         this.listOfCompaniesBase = listOfCompaniesBase;
         this.listOfCompanies = listOfCompanies;
+        if (flexStatement.getFromDate().equals(flexStatement.getToDate())) {
+            this.emailSubject = "Dividends on " + sdf.format(flexStatement.getFromDate());
+        }
+        else {
+            this.emailSubject = "Dividends from " + sdf.format(flexStatement.getFromDate()) + " to " + sdf.format(flexStatement.getToDate());
+        }
     }
 
     public void sendDividendEmail() {
         this.sendEmail(
                 this.getHtmlTable(),
-                "Dividends on " + new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()-24*60*60*1000))
+                this.emailSubject
         );
     }
 
@@ -47,7 +54,7 @@ public class DividendMessageBuilder extends MessageBuilder{
                 </tbody>
                 </table>""");
         sb.append("<h3>\n</h3>");
-        sb.append("<h3>Dividends in EUR: " + df.format(listOfCompaniesBase.stream().mapToDouble(Company::getAmount).sum()) + " euros" + "</h3>");
+        sb.append("<h3>Dividends in EUR: ").append(df.format(listOfCompaniesBase.stream().mapToDouble(Company::getAmount).sum())).append(" euros").append("</h3>");
         sb.append(htmlTableHeader);
         listOfCompaniesBase.forEach(company -> sb.append(getTableRow(company)));
         sb.append("""
@@ -58,14 +65,14 @@ public class DividendMessageBuilder extends MessageBuilder{
     }
 
     private String getTableRow(Company company) {
-        return  "<tr style=\"height: 18px;\">\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+new SimpleDateFormat("dd/MM/yyyy").format(company.getPaymentDate()) +"</td>\n" +
-                "<td style=\"width: 20%; height: 18px;\">"+company.getCompanyName()+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+df.format(company.getAmount())+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+df.format((company.getTax()))+ " (" + df.format(-100*company.getTax()/company.getAmount())+"%)</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+df.format(Double.valueOf(company.getAmount() + company.getTax()))+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+company.getCurrency()+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+company.getRate()+"</td>\n" +
+        return "<tr style=\"height: 18px;\">\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + sdf.format(company.getPaymentDate()) + "</td>\n" +
+                "<td style=\"width: 20%; height: 18px;\">" + company.getCompanyName() + "</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + df.format(company.getAmount()) + "</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + df.format((company.getTax())) + " (" + df.format(-100 * company.getTax() / company.getAmount()) + "%)</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + df.format(Double.valueOf(company.getAmount() + company.getTax())) + "</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + company.getCurrency() + "</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + company.getRate() + "</td>\n" +
                 "</tr>\n";
     }
 }

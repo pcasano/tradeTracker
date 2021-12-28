@@ -9,6 +9,7 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.MimeMessage;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
@@ -16,6 +17,7 @@ public class MessageBuilder {
 
     private final Configuration configuration;
     protected final DecimalFormat df = new DecimalFormat("0.00");
+    protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public MessageBuilder(Configuration configuration) {
         this.configuration = configuration;
