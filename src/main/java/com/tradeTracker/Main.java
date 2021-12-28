@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import com.tradeTracker.configuration.Configuration;
 import com.tradeTracker.configuration.ConfigurationReader;
+import java.util.Comparator;
 import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -66,12 +67,12 @@ public class Main {
 
         List<StatementOfFundsLine> listOfDivs = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "Currency", "DIV");
         List<StatementOfFundsLine> listOfTaxes = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "Currency", "FRTAX");
-        List<Company> listOfCompanies = getListOfDivCompanies(listOfDivs, listOfTaxes);
+        List<Company> listOfDivCompanies = getListOfDivCompanies(listOfDivs, listOfTaxes);
 
         List<StatementOfFundsLine> listOfTrades = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "Currency", "BUY", "SELL");
         List<Company> listOfTradeCompanies = getListOfTradeCompanies(listOfTrades);
 
-        new DividendMessageBuilder(listOfDivCompaniesBase, listOfCompanies, configuration).sendDividendEmail();
+        new DividendMessageBuilder(listOfDivCompaniesBase, listOfDivCompanies, configuration).sendDividendEmail();
         new TradeMessageBuilder(listOfTradeCompaniesBase, listOfTradeCompanies, configuration).sendTradeEmail();
 
         FlexStatement flexStatement = xmlParserForContent.getFlexStatement();
@@ -90,6 +91,7 @@ public class Main {
                     listOfTaxes.stream().filter(tax -> tax.getDescription().equals(dividend.getDescription())).findFirst()
             ));
         }
+        listOfCompanies.sort(Comparator.comparing(Company::getPaymentDate));
         return listOfCompanies;
     }
 
@@ -104,6 +106,7 @@ public class Main {
                     Optional.empty()
             ));
         }
+        listOfCompanies.sort(Comparator.comparing(Company::getPaymentDate));
         return listOfCompanies;
     }
 
