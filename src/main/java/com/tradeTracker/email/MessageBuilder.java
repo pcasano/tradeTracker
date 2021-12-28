@@ -7,12 +7,15 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.MimeMessage;
+
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Properties;
 
 public class MessageBuilder {
 
     private final Configuration configuration;
+    protected final DecimalFormat df = new DecimalFormat("0.00");
 
     public MessageBuilder(Configuration configuration) {
         this.configuration = configuration;
