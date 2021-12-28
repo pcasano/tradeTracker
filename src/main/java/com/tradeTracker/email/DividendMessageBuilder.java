@@ -3,7 +3,6 @@ package com.tradeTracker.email;
 import com.tradeTracker.configuration.Configuration;
 import com.tradeTracker.reportContents.Company;
 import com.tradeTracker.reportContents.FlexStatement;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class DividendMessageBuilder extends MessageBuilder {
@@ -18,8 +17,7 @@ public class DividendMessageBuilder extends MessageBuilder {
         this.listOfCompanies = listOfCompanies;
         if (flexStatement.getFromDate().equals(flexStatement.getToDate())) {
             this.emailSubject = "Dividends on " + sdf.format(flexStatement.getFromDate());
-        }
-        else {
+        } else {
             this.emailSubject = "Dividends from " + sdf.format(flexStatement.getFromDate()) + " to " + sdf.format(flexStatement.getToDate());
         }
     }
