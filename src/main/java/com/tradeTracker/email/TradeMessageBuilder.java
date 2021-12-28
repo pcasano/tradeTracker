@@ -3,8 +3,6 @@ package com.tradeTracker.email;
 import com.tradeTracker.configuration.Configuration;
 import com.tradeTracker.reportContents.Company;
 import com.tradeTracker.reportContents.FlexStatement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class TradeMessageBuilder extends MessageBuilder {
@@ -19,8 +17,7 @@ public class TradeMessageBuilder extends MessageBuilder {
         this.listOfCompanies = listOfCompanies;
         if (flexStatement.getFromDate().equals(flexStatement.getToDate())) {
             this.emailSubject = "Trades on " + sdf.format(flexStatement.getFromDate());
-        }
-        else {
+        } else {
             this.emailSubject = "Trades from " + sdf.format(flexStatement.getFromDate()) + " to " + sdf.format(flexStatement.getToDate());
         }
     }
@@ -65,13 +62,13 @@ public class TradeMessageBuilder extends MessageBuilder {
     }
 
     private String getTableRow(Company company) {
-        return  "<tr style=\"height: 18px;\">\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+sdf.format(company.getPaymentDate()) +"</td>\n" +
-                "<td style=\"width: 20%; height: 18px;\">"+company.getCompanyName()+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+company.getActivityCode()+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+df.format(-company.getAmount())+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+company.getCurrency()+"</td>\n" +
-                "<td style=\"width: 10%; height: 18px;\">"+company.getRate()+"</td>\n" +
+        return "<tr style=\"height: 18px;\">\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + sdf.format(company.getPaymentDate()) + "</td>\n" +
+                "<td style=\"width: 20%; height: 18px;\">" + company.getCompanyName() + "</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + company.getActivityCode() + "</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + df.format(-company.getAmount()) + "</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + company.getCurrency() + "</td>\n" +
+                "<td style=\"width: 10%; height: 18px;\">" + company.getRate() + "</td>\n" +
                 "</tr>\n";
     }
 }
