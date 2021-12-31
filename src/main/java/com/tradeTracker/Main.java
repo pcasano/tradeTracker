@@ -12,6 +12,8 @@ import io.restassured.specification.RequestSpecification;
 import com.tradeTracker.configuration.Configuration;
 import com.tradeTracker.configuration.ConfigurationReader;
 import java.util.Comparator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,11 +28,15 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
+    private static Logger logger = LogManager.getLogger(Main.class);
+
     public static void main(String[] args) throws JAXBException, ParserConfigurationException, IOException, SAXException, InterruptedException, ParseException {
+        logger.info("-------------------- Application starts --------------------");
         Configuration configuration = new ConfigurationReader().unmarshal();
 
         RestAssured.baseURI = configuration.getBrokerData().getBaseUrl();
         RequestSpecification request = RestAssured.given();
+        logger.info( "connection to IB");
         Response response = request.queryParam("t", configuration.getBrokerData().getToken())
                 .queryParam("q", new Query(configuration, args).getQueryId())
                 .queryParam("v", configuration.getBrokerData().getApiVersion())
@@ -40,14 +46,16 @@ public class Main {
 
         if(!xmlParserForReferenceCode.getStatus().equals("Success")) {
             if(xmlParserForReferenceCode.getErrorCode().equals("1020")){
-                // todo: set logs
-                throw new AccessDeniedException("Access denied");
+                AccessDeniedException accessDeniedException = new AccessDeniedException("Access denied");
+                logger.info( "connection to IB failed: " + accessDeniedException.getMessage());
+                throw accessDeniedException;
             }
         }
         String referenceCode = xmlParserForReferenceCode.getReferenceCode();
 
         TimeUnit.SECONDS.sleep(2);
         RequestSpecification requestForContent = RestAssured.given();
+        logger.info( "retrieving data from IB");
         Response responseForContent = requestForContent.queryParam("q", referenceCode)
                 .queryParam("t", configuration.getBrokerData().getToken())
                 .queryParam("v", configuration.getBrokerData().getApiVersion())
@@ -55,6 +63,7 @@ public class Main {
 
         String xmlStringForContent = responseForContent.asString();
 
+        logger.info( "parsing data from IB response");
         XmlParser xmlParserForContent = new XmlParser(xmlStringForContent);
         FlexStatement flexStatement = xmlParserForContent.getFlexStatement();
         List<StatementOfFundsLine> listOfStatementOfFundsLine = xmlParserForContent.getListOfStatementOfFundsLine();
@@ -75,6 +84,7 @@ public class Main {
 
         new DividendMessageBuilder(listOfDivCompaniesBase, listOfDivCompanies, configuration, flexStatement).sendDividendEmail();
         new TradeMessageBuilder(listOfTradeCompaniesBase, listOfTradeCompanies, configuration, flexStatement).sendTradeEmail();
+        logger.info("--------------------- Application ends ---------------------");
     }
 
     private static List<Company> getListOfDivCompanies(
@@ -82,7 +92,6 @@ public class Main {
             List<StatementOfFundsLine> listOfTaxes
     ) {
         List<Company> listOfCompanies = new ArrayList<>();
-
         for (StatementOfFundsLine dividend : listOfDivs) {
             listOfCompanies.add(new Company(
                     dividend,
@@ -95,7 +104,6 @@ public class Main {
 
     private static List<Company> getListOfTradeCompanies(List<StatementOfFundsLine> listOfTrades) {
         List<Company> listOfCompanies = new ArrayList<>();
-
         for (StatementOfFundsLine dividend : listOfTrades) {
             listOfCompanies.add(new Company(
                     dividend,

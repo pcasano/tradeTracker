@@ -1,23 +1,24 @@
 package com.tradeTracker.email;
 
 import com.tradeTracker.configuration.Configuration;
-import jakarta.activation.DataHandler;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.MimeMessage;
-
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MessageBuilder {
 
     private final Configuration configuration;
     protected final DecimalFormat df = new DecimalFormat("0.00");
     protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    protected final Logger logger = LogManager.getLogger(MessageBuilder.class);
 
     public MessageBuilder(Configuration configuration) {
         this.configuration = configuration;
@@ -40,15 +41,15 @@ public class MessageBuilder {
             );
             msg.setSubject(subject);
             msg.setSentDate(new Date());
-            msg.setText("Hello, world!\n");
             msg.setContent(table, "text/html");
             Transport.send(
                     msg,
                     configuration.getEmailData().getEmailSender(),
                     configuration.getEmailData().getEmailSenderPass()
             );
+            logger.info("sending message with subject: " + subject);
         } catch (MessagingException mex) {
-            System.out.println("send failed, exception: " + mex);
+            logger.error("error sending email: " + mex.getMessage());
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.tradeTracker.email;
 
+import com.tradeTracker.Main;
 import com.tradeTracker.configuration.Configuration;
 import com.tradeTracker.reportContents.Company;
 import com.tradeTracker.reportContents.FlexStatement;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DividendMessageBuilder extends MessageBuilder {
 
@@ -54,7 +57,10 @@ public class DividendMessageBuilder extends MessageBuilder {
         sb.append("<h3>\n</h3>");
         sb.append("<h3>Dividends in EUR: ").append(df.format(listOfCompaniesBase.stream().mapToDouble(Company::getAmount).sum())).append(" euros").append("</h3>");
         sb.append(htmlTableHeader);
-        listOfCompaniesBase.forEach(company -> sb.append(getTableRow(company)));
+        listOfCompaniesBase.forEach(company -> {
+            sb.append(getTableRow(company));
+            logger.info("dividend added: " + company.getCompanyName() + " | " + company.getAmount() + " " + company.getCurrency());
+        });
         sb.append("""
                 </tr>
                 </tbody>
