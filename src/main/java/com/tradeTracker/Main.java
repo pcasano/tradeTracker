@@ -75,15 +75,12 @@ public class Main {
 
         new DividendMessageBuilder(listOfDivCompaniesBase, listOfDivCompanies, configuration, flexStatement).sendDividendEmail();
         new TradeMessageBuilder(listOfTradeCompaniesBase, listOfTradeCompanies, configuration, flexStatement).sendTradeEmail();
-
-
-
     }
 
     private static List<Company> getListOfDivCompanies(
             List<StatementOfFundsLine> listOfDivs,
             List<StatementOfFundsLine> listOfTaxes
-    ) throws ParseException {
+    ) {
         List<Company> listOfCompanies = new ArrayList<>();
 
         for (StatementOfFundsLine dividend : listOfDivs) {
@@ -96,9 +93,7 @@ public class Main {
         return listOfCompanies;
     }
 
-    private static List<Company> getListOfTradeCompanies(
-            List<StatementOfFundsLine> listOfTrades
-    ) throws ParseException {
+    private static List<Company> getListOfTradeCompanies(List<StatementOfFundsLine> listOfTrades) {
         List<Company> listOfCompanies = new ArrayList<>();
 
         for (StatementOfFundsLine dividend : listOfTrades) {
