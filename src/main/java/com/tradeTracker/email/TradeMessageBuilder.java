@@ -46,7 +46,7 @@ public class TradeMessageBuilder extends MessageBuilder {
         sb.append(htmlTableHeader);
         listOfCompanies.forEach(company -> {
             sb.append(getTableRow(company));
-            logger.info("trade added: " + company.getCompanyName() + " | " + company.getAmount() + " " + company.getCurrency());
+            logger.info("trade added: " + company.getCompanyName() + " | " + -company.getAmount() + " " + company.getCurrency());
         });
 
         sb.append("""
