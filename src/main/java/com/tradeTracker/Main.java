@@ -82,8 +82,16 @@ public class Main {
         List<StatementOfFundsLine> listOfTrades = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "Currency", "BUY", "SELL");
         List<Company> listOfTradeCompanies = getListOfTradeCompanies(listOfTrades);
 
-        new DividendMessageBuilder(listOfDivCompaniesBase, listOfDivCompanies, configuration, flexStatement).sendDividendEmail();
-        new TradeMessageBuilder(listOfTradeCompaniesBase, listOfTradeCompanies, configuration, flexStatement).sendTradeEmail();
+        if(!listOfDivCompanies.isEmpty()) {
+            new DividendMessageBuilder(listOfDivCompaniesBase, listOfDivCompanies, configuration, flexStatement).sendDividendEmail();
+        } else {
+            logger.info("No dividends payments found");
+        }
+        if(!listOfTradeCompanies.isEmpty()) {
+            new TradeMessageBuilder(listOfTradeCompaniesBase, listOfTradeCompanies, configuration, flexStatement).sendTradeEmail();
+        } else {
+            logger.info("No trades found");
+        }
         logger.info("--------------------- Application ends ---------------------");
     }
 
