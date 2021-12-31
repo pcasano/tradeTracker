@@ -44,7 +44,10 @@ public class TradeMessageBuilder extends MessageBuilder {
                 """;
         StringBuilder sb = new StringBuilder("<h3>Trades in original currency:</h3>");
         sb.append(htmlTableHeader);
-        listOfCompanies.forEach(company -> sb.append(getTableRow(company)));
+        listOfCompanies.forEach(company -> {
+            sb.append(getTableRow(company));
+            logger.info("trade added: " + company.getCompanyName() + " | " + company.getAmount() + " " + company.getCurrency());
+        });
 
         sb.append("""
                 </tr>
@@ -53,10 +56,7 @@ public class TradeMessageBuilder extends MessageBuilder {
         sb.append("<h3>\n</h3>");
         sb.append("<h3>Trades in EUR: ").append(df.format(-listOfCompaniesBase.stream().mapToDouble(Company::getAmount).sum())).append(" euros").append("</h3>");
         sb.append(htmlTableHeader);
-        listOfCompaniesBase.forEach(company -> {
-            sb.append(getTableRow(company));
-            logger.info("trade added: " + company.getCompanyName() + " | " + company.getAmount() + " " + company.getCurrency());
-        });
+        listOfCompaniesBase.forEach(company -> sb.append(getTableRow(company)));
         sb.append("""
                 </tr>
                 </tbody>

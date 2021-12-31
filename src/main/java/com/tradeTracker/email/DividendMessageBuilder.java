@@ -48,7 +48,10 @@ public class DividendMessageBuilder extends MessageBuilder {
                 """;
         StringBuilder sb = new StringBuilder("<h3>Dividends in original currency:</h3>");
         sb.append(htmlTableHeader);
-        listOfCompanies.forEach(company -> sb.append(getTableRow(company)));
+        listOfCompanies.forEach(company -> {
+            sb.append(getTableRow(company));
+            logger.info("trade added: " + company.getCompanyName() + " | " + company.getAmount() + " " + company.getCurrency());
+        });
 
         sb.append("""
                 </tr>
@@ -57,10 +60,7 @@ public class DividendMessageBuilder extends MessageBuilder {
         sb.append("<h3>\n</h3>");
         sb.append("<h3>Dividends in EUR: ").append(df.format(listOfCompaniesBase.stream().mapToDouble(Company::getAmount).sum())).append(" euros").append("</h3>");
         sb.append(htmlTableHeader);
-        listOfCompaniesBase.forEach(company -> {
-            sb.append(getTableRow(company));
-            logger.info("dividend added: " + company.getCompanyName() + " | " + company.getAmount() + " " + company.getCurrency());
-        });
+        listOfCompaniesBase.forEach(company -> sb.append(getTableRow(company)));
         sb.append("""
                 </tr>
                 </tbody>
