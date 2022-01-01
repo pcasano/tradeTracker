@@ -8,13 +8,11 @@ public class Query {
         if(runnerType.length==0) {
             this.queryId = configuration.getBrokerData().getMonthlyQueryId();
         } else {
-            if(runnerType[0].equals("d")){
-                this.queryId = configuration.getBrokerData().getDailyQueryId();
-            }
-            else if(runnerType[0].equals("m")){
-                this.queryId = configuration.getBrokerData().getMonthlyQueryId();
-            }else{
-                throw new IllegalArgumentException("tradeTracker can run only with d or m parameters");
+            switch (runnerType[0]) {
+                case "d" -> this.queryId = configuration.getBrokerData().getDailyQueryId();
+                case "lm" -> this.queryId = configuration.getBrokerData().getLastMonthQueryId();
+                case "m" -> this.queryId = configuration.getBrokerData().getMonthlyQueryId();
+                default -> throw new IllegalArgumentException("tradeTracker can run only with d or m parameters");
             }
         }
     }

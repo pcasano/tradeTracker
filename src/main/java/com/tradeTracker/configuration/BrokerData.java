@@ -11,6 +11,8 @@ public class BrokerData {
     @XmlElement
     private String monthlyQueryId;
     @XmlElement
+    private String lastMonthQueryId;
+    @XmlElement
     private String baseUrl;
     @XmlElement
     private String apiVersion;
@@ -33,5 +35,9 @@ public class BrokerData {
 
     public String getApiVersion() {
         return apiVersion;
+    }
+
+    public String getLastMonthQueryId() {
+        return lastMonthQueryId;
     }
 }

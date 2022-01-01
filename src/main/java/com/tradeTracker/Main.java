@@ -14,12 +14,7 @@ import com.tradeTracker.configuration.ConfigurationReader;
 import java.util.Comparator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.xml.sax.SAXException;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.nio.file.AccessDeniedException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,9 +23,9 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    private static Logger logger = LogManager.getLogger(Main.class);
+    private static final Logger logger = LogManager.getLogger(Main.class);
 
-    public static void main(String[] args) throws JAXBException, ParserConfigurationException, IOException, SAXException, InterruptedException, ParseException {
+    public static void main(String[] args) throws Exception {
         logger.info("-------------------- Application starts --------------------");
         Configuration configuration = new ConfigurationReader().unmarshal();
 
@@ -45,10 +40,10 @@ public class Main {
         XmlParser xmlParserForReferenceCode = new XmlParser(xmlStringForReferenceCode);
 
         if(!xmlParserForReferenceCode.getStatus().equals("Success")) {
-            if(xmlParserForReferenceCode.getErrorCode().equals("1020")){
-                AccessDeniedException accessDeniedException = new AccessDeniedException("Access denied");
-                logger.info( "connection to IB failed: " + accessDeniedException.getMessage());
-                throw accessDeniedException;
+            if(xmlParserForReferenceCode.getErrorCode().equals("1020")) {
+                throw new AccessDeniedException("connection to IB failed: Access denied");
+            } else {
+                throw new Exception("Statement could not be generated at this time");
             }
         }
         String referenceCode = xmlParserForReferenceCode.getReferenceCode();

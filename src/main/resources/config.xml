@@ -4,12 +4,14 @@
     <brokerData>
         <baseUrl>https://gdcdyn.interactivebrokers.com/Universal/servlet/</baseUrl>
         <token>...</token>
-        <queryId>...</queryId>
+        <dailyQueryId>...423</dailyQueryId>
+        <monthlyQueryId>...</monthlyQueryId>
+        <lastMonthQueryId>...</lastMonthQueryId>
         <apiVersion>3</apiVersion>
     </brokerData>
     <emailData>
         <emailSender>ib.trade.tracker@gmail.com</emailSender>
         <emailSenderPass>...</emailSenderPass>
-        <targetEmail>...</targetEmail>
+        <targetEmail>pabcas@pm.me</targetEmail>
     </emailData>
 </configuration>
