@@ -12,6 +12,8 @@ import io.restassured.specification.RequestSpecification;
 import com.tradeTracker.configuration.Configuration;
 import com.tradeTracker.configuration.ConfigurationReader;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.nio.file.AccessDeniedException;
@@ -65,6 +67,7 @@ public class Main {
 
         List<StatementOfFundsLine> listOfDivsBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "DIV");
         List<StatementOfFundsLine> listOfTaxesBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "FRTAX");
+
         List<Company> listOfDivCompaniesBase = getListOfDivCompanies(listOfDivsBase, listOfTaxesBase);
 
         List<StatementOfFundsLine> listOfTradesBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "BUY", "SELL");
@@ -90,21 +93,6 @@ public class Main {
         logger.info("--------------------- Application ends ---------------------");
     }
 
-    private static List<Company> getListOfDivCompanies(
-            List<StatementOfFundsLine> listOfDivs,
-            List<StatementOfFundsLine> listOfTaxes
-    ) {
-        List<Company> listOfCompanies = new ArrayList<>();
-        for (StatementOfFundsLine dividend : listOfDivs) {
-            listOfCompanies.add(new Company(
-                    dividend,
-                    listOfTaxes.stream().filter(tax -> tax.getDescription().equals(dividend.getDescription())).findFirst()
-            ));
-        }
-        listOfCompanies.sort(Comparator.comparing(Company::getPaymentDate));
-        return listOfCompanies;
-    }
-
     private static List<Company> getListOfTradeCompanies(List<StatementOfFundsLine> listOfTrades) {
         List<Company> listOfCompanies = new ArrayList<>();
         for (StatementOfFundsLine dividend : listOfTrades) {
@@ -123,5 +111,33 @@ public class Main {
             String... activityCode) {
         return listOfStatementOfFundsLine.stream()
                 .filter(entry -> entry.getLevelOfDetail().equals(levelOfDetail) && Arrays.asList(activityCode).contains(entry.getActivityCode())).toList();
+    }
+    
+    private static List<Company> getListOfDivCompanies(List<StatementOfFundsLine> listOfDivs, List<StatementOfFundsLine> listOfTaxes) {
+        ArrayList<Company> listOfCompanies = new ArrayList<>();
+        Map<String, Double> companyDivsMap = listOfDivs.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                StatementOfFundsLine::getDescription,
+                                Collectors.summingDouble(StatementOfFundsLine::getAmount)));
+        Map<String, Double> companyTaxesMap = listOfTaxes.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                StatementOfFundsLine::getDescription,
+                                Collectors.summingDouble(StatementOfFundsLine::getAmount)));
+
+        companyDivsMap.forEach((key, value) -> {
+            StatementOfFundsLine targetCompany = listOfDivs.stream()
+                    .filter(statementOfFundsLine -> statementOfFundsLine.getDescription().equals(key)).findFirst().get();
+            listOfCompanies.add(new Company(
+                    targetCompany.getDate(),
+                    targetCompany.getDescription(),
+                    value,
+                    targetCompany.getCurrency(),
+                    targetCompany.getFxRateToBase(),
+                    targetCompany.getActivityCode(),
+                    companyTaxesMap.get(targetCompany.getDescription())));
+        });
+        return listOfCompanies;
     }
 }

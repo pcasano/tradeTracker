@@ -25,6 +25,16 @@ public class Company {
 
     }
 
+    public Company(Date paymentDate, String companyName, double amount, String currency, double rate, String activityCode, double tax) {
+        this.paymentDate = paymentDate;
+        this.companyName = companyName;
+        this.amount = amount;
+        this.currency = currency;
+        this.rate = rate;
+        this.activityCode = activityCode;
+        this.tax = tax;
+    }
+
     public String getActivityCode() {
         return activityCode;
     }
