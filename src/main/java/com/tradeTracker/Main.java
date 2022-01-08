@@ -67,7 +67,6 @@ public class Main {
 
         List<StatementOfFundsLine> listOfDivsBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "DIV");
         List<StatementOfFundsLine> listOfTaxesBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "FRTAX");
-
         List<Company> listOfDivCompaniesBase = getListOfDivCompanies(listOfDivsBase, listOfTaxesBase);
 
         List<StatementOfFundsLine> listOfTradesBase = getListOfStatementOfFundsLine(listOfStatementOfFundsLine, "BaseCurrency", "BUY", "SELL");
