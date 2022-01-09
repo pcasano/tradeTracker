@@ -137,6 +137,7 @@ public class Main {
                     targetCompany.getActivityCode(),
                     companyTaxesMap.get(targetCompany.getDescription())));
         });
+        listOfCompanies.sort(Comparator.comparing(Company::getPaymentDate));
         return listOfCompanies;
     }
 }
