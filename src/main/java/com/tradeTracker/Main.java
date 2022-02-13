@@ -135,7 +135,7 @@ public class Main {
                     targetCompany.getCurrency(),
                     targetCompany.getFxRateToBase(),
                     targetCompany.getActivityCode(),
-                    companyTaxesMap.get(targetCompany.getDescription())));
+                    Optional.ofNullable(companyTaxesMap.get(targetCompany.getDescription()))));
         });
         listOfCompanies.sort(Comparator.comparing(Company::getPaymentDate));
         return listOfCompanies;
