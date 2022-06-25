@@ -125,7 +125,7 @@ public class Main {
 
         companyDivsMap.forEach((key, value) -> {
             StatementOfFundsLine targetCompany = listOfDivs.stream()
-                    .filter(statementOfFundsLine -> statementOfFundsLine.getDescription().equals(key)).findFirst().get();
+                    .filter(statementOfFundsLine -> statementOfFundsLine.getDescription().equals(key)).findFirst().orElseThrow();
             listOfCompanies.add(new Company(
                     targetCompany.getDate(),
                     targetCompany.getDescription(),
