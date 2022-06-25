@@ -24,7 +24,7 @@ public class MessageBuilder {
         this.configuration = configuration;
     }
 
-    protected void sendEmail(String table, String subject) {
+    public void sendEmail(String table, String subject) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");

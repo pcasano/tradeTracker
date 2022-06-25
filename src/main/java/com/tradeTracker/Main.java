@@ -2,6 +2,7 @@ package com.tradeTracker;
 
 import com.tradeTracker.configuration.Query;
 import com.tradeTracker.email.DividendMessageBuilder;
+import com.tradeTracker.email.MessageBuilder;
 import com.tradeTracker.email.TradeMessageBuilder;
 import com.tradeTracker.reportContents.Company;
 import com.tradeTracker.reportContents.FlexStatement;
@@ -42,6 +43,7 @@ public class Main {
         XmlParser xmlParserForReferenceCode = new XmlParser(xmlStringForReferenceCode);
 
         if(!xmlParserForReferenceCode.getStatus().equals("Success")) {
+            new MessageBuilder(configuration).sendEmail(xmlParserForReferenceCode.getErrorMessage(), "Error retrieving data from IB");
             throw new AccessDeniedException("connection to IB failed due to: " + xmlParserForReferenceCode.getErrorMessage());
         }
         String referenceCode = xmlParserForReferenceCode.getReferenceCode();
