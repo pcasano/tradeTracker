@@ -39,6 +39,10 @@ public class XmlParser {
         return this.document.getElementsByTagName("Status").item(0).getTextContent();
     }
 
+    public String getErrorMessage() {
+        return this.document.getElementsByTagName("ErrorMessage").item(0).getTextContent();
+    }
+
     public String getErrorCode() {
         return this.document.getElementsByTagName("ErrorCode").item(0).getTextContent();
     }
