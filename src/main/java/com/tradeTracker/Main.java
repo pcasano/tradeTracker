@@ -42,11 +42,7 @@ public class Main {
         XmlParser xmlParserForReferenceCode = new XmlParser(xmlStringForReferenceCode);
 
         if(!xmlParserForReferenceCode.getStatus().equals("Success")) {
-            if(xmlParserForReferenceCode.getErrorCode().equals("1020")) {
-                throw new AccessDeniedException("connection to IB failed: Access denied");
-            } else {
-                throw new Exception("Statement could not be generated at this time");
-            }
+            throw new AccessDeniedException("connection to IB failed due to: " + xmlParserForReferenceCode.getErrorMessage());
         }
         String referenceCode = xmlParserForReferenceCode.getReferenceCode();
 
